@@ -1,0 +1,32 @@
+{
+  "ver": "2.3.1",
+  "uuid": "27ae22ad-9400-4c81-87c3-264e5149ec8b",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "premultiplyAlpha": false,
+  "platformSettings": {},
+  "subMetas": {
+    "雷霆战机+全民飞机大战+飞机大战全套素材-img num 明_爱给网_aigei_com": {
+      "ver": "1.0.4",
+      "uuid": "d1bd0b09-bc73-4556-8342-6ea1bf916a7c",
+      "rawTextureUuid": "27ae22ad-9400-4c81-87c3-264e5149ec8b",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 290,
+      "height": 36,
+      "rawWidth": 290,
+      "rawHeight": 36,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
