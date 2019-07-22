@@ -81,8 +81,8 @@ module.exports = function(prefabs) {
             blockLife = (i == blockMinLifeValKey) ? Privatex.rnd(15,20) : Math.floor(Math.random()*60+1) ;
 
             node.active = true;
-            node.setPosition(x, (cc.view.getVisibleSize().height / 2) + 100);
-            // node.setPosition(x, (cc.view.getVisibleSize().height / 2));
+            // node.setPosition(x, (cc.view.getVisibleSize().height / 2) + 100);
+            node.setPosition(x, (cc.view.getVisibleSize().height / 2));
             node.setContentSize(blockInfo.w, 100);
             node.getComponent(node._name).setNum(blockLife);
             node.getComponent(node._name).setPool(Privatex.getNodePoolObject.call(this, nodePoolKey));

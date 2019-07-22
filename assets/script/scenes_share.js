@@ -11,13 +11,13 @@ cc.Class({
         this.node.getChildByName('fraction').getComponent(cc.Label).string = Cm.lastGameFraction;
 
         // 再来一次
-        this.node.getChildByName('button').getChildByName('again').on(cc.Node.EventType.TOUCH_START, () => {
+        this.node.getChildByName('button').getChildByName('again').on(cc.Node.EventType.TOUCH_END, () => {
             cc.director.loadScene('game');
         })
 
-        // 分享
-        this.node.getChildByName('button').getChildByName('again').on(cc.Node.EventType.TOUCH_START, () => {
-            cc.director.loadScene('game');
+        // 排行榜
+        this.node.getChildByName('button').getChildByName('share').on(cc.Node.EventType.TOUCH_END, () => {
+            cc.director.loadScene('ranking');
         })
     },
 

@@ -19,11 +19,15 @@ cc.Class({
 
     start () {
         // 开始
-        this.node.getChildByName('button').getChildByName('start_game').on(cc.Node.EventType.TOUCH_START, (e) => {
+        this.node.getChildByName('button').getChildByName('start_game').on(cc.Node.EventType.TOUCH_END, (e) => {
             cc.director.preloadScene("game", function () {
                 cc.director.loadScene('game')
             });
-            
+        })
+
+        // 排行榜
+        this.node.getChildByName('button').getChildByName('ranking').on(cc.Node.EventType.TOUCH_END, () => {
+            cc.director.loadScene('ranking');
         })
 
     },
