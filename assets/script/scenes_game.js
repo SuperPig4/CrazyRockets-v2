@@ -6,6 +6,7 @@ cc.Class({
     extends: cc.Component,
 
     properties: {
+        // 分数
         fraction : {
             type: cc.Integer,
             get : function() {
@@ -17,6 +18,9 @@ cc.Class({
                 this.node.getChildByName('scoring').setPosition(-(this.node.width - 60) / 2, (this.node.height - 100) / 2);
             }
         },
+        // 障碍移动速度 - 会根据难度动态变动
+        blockSpeed : 230,
+        // 定时器
         setIntervalFunAr : []
     },
 
@@ -29,12 +33,15 @@ cc.Class({
         Cm.stop = false;
 
         var playerType = 'default_aircraft';
+
+        // 加载子弹
         cc.loader.loadRes("aircraft/prefab/" + playerType, (err, prefab) => {
             this.player = cc.instantiate(prefab);
             this.node.addChild(this.player);
             this.initAction();
         });
 
+        // 加载障碍
         cc.loader.loadResDir("block/prefab", (err, prefab, urls) => {
             this.blockStart(prefab);
         });
@@ -83,11 +90,24 @@ cc.Class({
     // 生成障碍
     blockStart (prefabs) {
         this.blockActObject = new BlockLogic(prefabs);
-        this.blockActObject.created(200);
-
+        var min = 10,max = 15;
+        this.blockActObject.created(this.blockSpeed, min, max);
         this.setInterval(() => {
-            this.blockActObject.created(200);
-        }, 2);
+
+            // 调整障碍生命 共三个等级
+            if(this.fraction > 300 && this.fraction < 400 && min != 20) {
+                min += 10;
+                max += 10;
+            } else if(this.fraction > 600 && this.fraction < 700 && min != 30) {
+                min += 10;
+                max += 10;
+            } else if(this.fraction > 1000 && this.fraction < 1100 && min != 40) {
+                min += 10;
+                max += 10;
+            }
+
+            this.blockActObject.created(this.blockSpeed, min, max);
+        }, 2.5);
     }, 
 
     // 初始化控制
@@ -100,10 +120,6 @@ cc.Class({
                 width = ((this.node.width - this.player.width) / 2),
                 height = ((this.node.height - this.player.height) / 2),
                 num = {x:0,y:0};
-
-                // console.log('location:'+location.x)
-                // console.log('lastLoaction:'+lastLoaction.x)
-                // console.log(location.x > lastLoaction.x)
 
                 // x
                 if(location.x > lastLoaction.x) {

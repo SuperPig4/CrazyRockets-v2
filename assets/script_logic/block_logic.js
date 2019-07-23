@@ -60,14 +60,13 @@ module.exports = function(prefabs) {
     Privatex.createdNodePools.call(this, prefabs)
 
     // 创造
-    this.created = function(speed) {
+    this.created = function(speed, min, max) {
         var container = new cc.Node(),
         blockInfo = Privatex.getBlockInfo(),
         // 块最小生命值key
-        blockMinLifeValKey = Math.floor(Math.random() * blockInfo.num + 1),
+        blockMinLifeValKey = Privatex.rnd(0, blockInfo.num),
         // 节点对象池key
-        // nodePoolKey = (blockInfo.num == 4) ? 1 : 0;
-        nodePoolKey = 0;
+        nodePoolKey = (blockInfo.num == 4) ? 1 : 0;
 
         // 增加脚本
         container.setAnchorPoint(0, 1);
@@ -78,17 +77,15 @@ module.exports = function(prefabs) {
             var x = (cc.view.getVisibleSize().width / 2) - ((blockInfo.w + blockInfo.fx) * (i + 1)),
             node = Privatex.getNodePool.call(this, nodePoolKey),
             // 生命值
-            blockLife = (i == blockMinLifeValKey) ? Privatex.rnd(15,20) : Math.floor(Math.random()*60+1) ;
-
+            blockLife = (i == blockMinLifeValKey) ? Privatex.rnd(5,15) : Privatex.rnd(min,max);
             node.active = true;
-            // node.setPosition(x, (cc.view.getVisibleSize().height / 2) + 100);
-            node.setPosition(x, (cc.view.getVisibleSize().height / 2));
+            
+            node.setPosition(x, (cc.view.getVisibleSize().height / 2) + 100);
             node.setContentSize(blockInfo.w, 100);
             node.getComponent(node._name).setNum(blockLife);
             node.getComponent(node._name).setPool(Privatex.getNodePoolObject.call(this, nodePoolKey));
             node.getComponent(cc.BoxCollider).size = {width:node.width, height:node.height}
             node.getComponent(cc.BoxCollider).offset = {x:(node.width / 2),y:-(node.height / 2)}
-            // node.getChildByName('num').getComponent(cc.Widget).updateAlignment();
             container.addChild(node);
         }
         container.active = true;

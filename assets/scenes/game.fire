@@ -1697,6 +1697,8 @@
       "__id__": 2
     },
     "_enabled": true,
+    "blockSpeed": 230,
+    "setIntervalFunAr": [],
     "_id": "91uQDPQk9PxLwQ1l6cmjle"
   }
 ]
