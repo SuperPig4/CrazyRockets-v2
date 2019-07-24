@@ -11,7 +11,7 @@ cc.Class({
 
     onLoad () {
         this.node.zIndex = 2;
-        this.initBulletNodePool(30);
+        this.initBulletNodePool(60);
     },
 
     start () {
@@ -40,12 +40,29 @@ cc.Class({
     bulletStart () {
         cc.find('Canvas').getComponent('scenes_game').setInterval(() => {
             // 创建节点
-            var node = this.getBulletNodePool();
-            node.setPosition(this.node.x, this.node.y);
-            node.zIndex = 1;
-            node.active = true;
-            node.getComponent('default_bullet').setAircraft(this);
-            cc.find("Canvas/bullet_bg").addChild(node);
+            for(var i = 0; i <= 2; i++) {
+                var node = this.getBulletNodePool(), position;
+                
+                // 位置
+                switch(i) {
+                    case 0 :
+                            position = 'left';
+                        break;
+                    case 1 : 
+                        position = 'center';
+                        break;  
+                    case 2 : 
+                        position = 'right';
+                        break;  
+                }
+
+                node.setPosition(this.node.x, this.node.y);
+                node.getComponent('three_bullet').setPositionType(position);
+                node.getComponent('three_bullet').setAircraft(this);
+                node.zIndex = 1;
+                node.active = true;
+                cc.find("Canvas/bullet_bg").addChild(node);
+            }
         }, 0.1, 'aircraft');
     },
 

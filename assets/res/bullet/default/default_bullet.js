@@ -27,8 +27,6 @@ cc.Class({
         }
     },
 
-    onCollisionEnter (e) {
-    },
 
     // 直接释放
     release () {

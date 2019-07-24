@@ -36,7 +36,7 @@ cc.Class({
     // 碰撞时回调
     onCollisionEnter (e, x) {
         switch(e.node.name) {
-            case 'default_bullet' : 
+            case 'default_bullet' : case 'three_bullet' : 
                     // 子弹碰撞
                     this.node.color = new cc.Color(218, 131, 231);
                     cc.find('Canvas').getComponent('scenes_game').increase();
@@ -52,7 +52,7 @@ cc.Class({
                         this.node.color = new cc.Color(255, 255, 255);
                     },0.1)
                 break;
-            case 'default_aircraft' :
+            case 'aircraft' :
                     // 主角碰撞
                     cc.find('Canvas').getComponent('scenes_game').dead();
                 break;

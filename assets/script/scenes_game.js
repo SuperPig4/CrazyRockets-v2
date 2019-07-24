@@ -33,10 +33,12 @@ cc.Class({
         Cm.stop = false;
 
         var playerType = 'default_aircraft';
+        // var playerType = 'three_aircraft';
 
-        // 加载子弹
+        // 加载飞机
         cc.loader.loadRes("aircraft/prefab/" + playerType, (err, prefab) => {
             this.player = cc.instantiate(prefab);
+            this.player.name = 'aircraft';
             this.node.addChild(this.player);
             this.initAction();
         });
@@ -46,8 +48,8 @@ cc.Class({
             this.blockStart(prefab);
         });
 
-        // 初始化事件
         this.initEvent();
+        this.loadAircraftSelectUi();
     },
 
     start () {
@@ -85,6 +87,13 @@ cc.Class({
             e.stopPropagation();
             cc.director.loadScene('start')
         })
+
+        // 选择子弹
+        this.node.getChildByName('stop_action').getChildByName('select_aircraft').on(cc.Node.EventType.TOUCH_END, (e) => {
+            e.stopPropagation();
+            this.node.getChildByName('stop_action').active = false;
+            this.node.getChildByName('select_aircraft').active = true;
+        })
     },
 
     // 生成障碍
@@ -107,7 +116,7 @@ cc.Class({
             }
 
             this.blockActObject.created(this.blockSpeed, min, max);
-        }, 2.5);
+        }, 2.5, 'block');
     }, 
 
     // 初始化控制
@@ -159,16 +168,17 @@ cc.Class({
     },
 
     // 定时器
-    setInterval (fun, interval) {
+    setInterval (fun, interval, key) {
         this.setIntervalFunAr.push({
             fun : fun,
             interval : interval,
+            key : key,
         });
         this.schedule(fun, interval);
     },
 
     // 暂停所有定时器
-    stopInterval () {
+    stopInterval (key) {
         for(var i in this.setIntervalFunAr) {
             var item = this.setIntervalFunAr[i];
             this.unschedule(item.fun, item.interval);
@@ -180,6 +190,18 @@ cc.Class({
         for(var i in this.setIntervalFunAr) {
             var item = this.setIntervalFunAr[i];
             this.schedule(item.fun, item.interval);
+        }
+    },
+
+    // 删除某个定时器
+    deleteInterval (key) {
+        for(var i in this.setIntervalFunAr) {
+            var item = this.setIntervalFunAr[i];
+            if(item.key == key) {
+                this.unschedule(item.fun, item.interval);
+                this.setIntervalFunAr.splice(i, 1);
+                break;
+            }
         }
     },
 
@@ -210,5 +232,44 @@ cc.Class({
             cc.director.loadScene('share');
         })
     },
-    
+
+    // 加载费解选择Ui
+    loadAircraftSelectUi () {
+        cc.find("Canvas/select_aircraft").zIndex = 10;
+        var copyNode = cc.find("Canvas/select_aircraft/select/view/item_copy");
+        cc.loader.loadResDir("aircraft/icon_list", cc.SpriteFrame, (err, SpriteFrame, urls) => {
+            var ju = 30;
+            for(var i in SpriteFrame) {
+                var newNode = cc.instantiate(copyNode);
+                newNode.name = SpriteFrame[i].name;
+                newNode.getComponent(cc.Sprite).spriteFrame = SpriteFrame[i];
+                newNode.getComponent(cc.Widget).left = ju;
+                newNode.on(cc.Node.EventType.TOUCH_START, (e) => {
+                    // 加载飞机
+                    cc.loader.loadRes("aircraft/prefab/" + e.target.name, (err, prefab) => {
+                        // 删除旧的
+                        var position = this.node.getChildByName('aircraft').getPosition();
+                        this.node.getChildByName('aircraft').removeFromParent(true);
+                        this.deleteInterval('aircraft');
+                        // 增加
+                        this.player = cc.instantiate(prefab);
+                        this.player.setPosition(position.x, position.y);
+                        this.player.name = 'aircraft';
+                        this.node.addChild(this.player);
+                        // 启动
+                        this.node.getChildByName('select_aircraft').active = false;
+                        Cm.stop = false;
+                        this.restoreInterval();
+                    });
+                })
+                newNode.active = true;
+                ju += 100;
+                cc.find("Canvas/select_aircraft/select/view/content").addChild(newNode);
+            }
+            // 调整父节点宽度
+            if(ju > this.node.width) {
+                cc.find("Canvas/select_aircraft/select/view/content").width = ju;
+            }
+        });
+    }
 })
