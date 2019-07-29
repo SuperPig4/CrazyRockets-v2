@@ -233,7 +233,7 @@ cc.Class({
         })
     },
 
-    // 加载费解选择Ui
+    // 加载武器选择Ui
     loadAircraftSelectUi () {
         cc.find("Canvas/select_aircraft").zIndex = 10;
         var copyNode = cc.find("Canvas/select_aircraft/select/view/item_copy");
@@ -244,7 +244,7 @@ cc.Class({
                 newNode.name = SpriteFrame[i].name;
                 newNode.getComponent(cc.Sprite).spriteFrame = SpriteFrame[i];
                 newNode.getComponent(cc.Widget).left = ju;
-                newNode.on(cc.Node.EventType.TOUCH_START, (e) => {
+                newNode.on(cc.Node.EventType.TOUCH_END, (e) => {
                     // 加载飞机
                     cc.loader.loadRes("aircraft/prefab/" + e.target.name, (err, prefab) => {
                         // 删除旧的
